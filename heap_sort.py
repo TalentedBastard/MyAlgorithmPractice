@@ -64,10 +64,38 @@ def heap_sort(l):
         l[0], l[i] = l[i], l[0]
         sift(l, 0, i-1) # i-1是新的high
 
+def heap_topk(l, k):
+    """
+    堆排序解决topK问题(最小k个)
+        1，建堆
+        2，排序
+        3，出数
+    :param l: 数组
+    :param k: 前K个数
+    :return: 数组
+    """
+    # 1，建堆
+    heap = l[:k]
+    for i in range((k-2)//2, -1, -1):
+        sift(heap, i, k-1)
+    print(heap)
+    # 2，排序
+    for i in range(k,len(l)-1):
+        if l[i] < heap[0]:  # 因为是最大堆，新元素比堆顶小才可能比堆内其他元素小
+            heap[0] = l[i]
+            sift(heap, 0, k-1)
+    # 3，出数
+    for i in range(k-1, -1, -1):
+        heap[0], heap[i] = heap[i], heap[0]
+        sift(heap, 0, i-1)
+    return heap
+
 if __name__ == '__main__':
     import random
     l = [i for i in range(10)]
     random.shuffle(l)
     print("初始的l：    %s" % l)
-    heap_sort(l)
-    print("堆排序后的l： %s" % l)
+    # heap_sort(l)
+    # print("堆排序后的l： %s" % l)
+    l = heap_topk(l,3)
+    print("堆排序后的top3： %s" % l)
